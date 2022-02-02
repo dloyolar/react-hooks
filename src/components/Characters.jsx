@@ -1,6 +1,14 @@
-import { useEffect, useMemo, useReducer, useRef, useState } from 'react';
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useReducer,
+  useRef,
+  useState,
+} from 'react';
 
 import '../styles/Characters.css';
+import Search from './Search';
 
 const initialState = {
   favorites: [],
@@ -36,9 +44,13 @@ export const Characters = () => {
     dispatch({ type: 'ADD_TO_FAVORITE', payload: favorite });
   };
 
-  const handleSearch = () => {
+  // const handleSearch = () => {
+  //   setSearch(searchInput.current.value);
+  // };
+
+  const handleSearch = useCallback(() => {
     setSearch(searchInput.current.value);
-  };
+  }, []);
 
   // const filteredUsers = characters.filter((user) => {
   //   return user.name.toLowerCase().includes(search.toLowerCase());
@@ -54,10 +66,7 @@ export const Characters = () => {
 
   return (
     <>
-      <div className="Search">
-        <p>Search</p>
-        <input type="text" onChange={handleSearch} ref={searchInput} />
-      </div>
+      <Search handleSearch={handleSearch} searchInput={searchInput} />
 
       {favorites.favorites.map((favorite) => (
         <div key={favorite.id} className="Favorite">
