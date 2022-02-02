@@ -1,8 +1,17 @@
 .Characters {
+  flex-wrap: wrap;
+}
+
+.Search,
+.Favorite,
+.Characters {
   display: flex;
   justify-content: center;
   align-items: center;
-  flex-wrap: wrap;
+}
+
+.Search {
+  margin: 16px 0;
 }
 
 .Characters-container {

@@ -1,4 +1,4 @@
-import { useEffect, useReducer, useState } from 'react';
+import { useEffect, useMemo, useReducer, useState } from 'react';
 
 import '../styles/Characters.css';
 
@@ -21,6 +21,7 @@ const favoriteReducer = (state, action) => {
 export const Characters = () => {
   const [characters, setCharacters] = useState([]);
   const [favorites, dispatch] = useReducer(favoriteReducer, initialState);
+  const [search, setSearch] = useState('');
 
   useEffect(() => {
     fetch('https://rickandmortyapi.com/api/character')
@@ -34,21 +35,48 @@ export const Characters = () => {
     dispatch({ type: 'ADD_TO_FAVORITE', payload: favorite });
   };
 
-  console.log(favorites);
+  const handleSearch = (e) => {
+    setSearch(e.target.value);
+  };
+
+  // const filteredUsers = characters.filter((user) => {
+  //   return user.name.toLowerCase().includes(search.toLowerCase());
+  // });
+
+  const filteredUsers = useMemo(
+    () =>
+      characters.filter((user) => {
+        return user.name.toLowerCase().includes(search.toLowerCase());
+      }),
+    [characters, search]
+  );
 
   return (
-    <div className="Characters">
-      {characters.map((character) => (
-        <div className="Characters-container" key={character.id}>
-          <img src={character.image} alt={character.name} />
-          <h3>{character.name}</h3>
-          <p>Gender: {character.gender}</p>
-          <p>Status: {character.status}</p>
-          <button type="button" onClick={() => handleClick(character)}>
-            Add to favorite
-          </button>
+    <>
+      <div className="Search">
+        <p>Search</p>
+        <input type="text" value={search} onChange={handleSearch} />
+      </div>
+
+      {favorites.favorites.map((favorite) => (
+        <div key={favorite.id} className="Favorite">
+          <li>{favorite.name}</li>
         </div>
       ))}
-    </div>
+
+      <div className="Characters">
+        {filteredUsers.map((character) => (
+          <div className="Characters-container" key={character.id}>
+            <img src={character.image} alt={character.name} />
+            <h3>{character.name}</h3>
+            <p>Gender: {character.gender}</p>
+            <p>Status: {character.status}</p>
+            <button type="button" onClick={() => handleClick(character)}>
+              Add to favorite
+            </button>
+          </div>
+        ))}
+      </div>
+    </>
   );
 };
