@@ -16,9 +16,11 @@
 .bg-light {
   background-color: #fafafa;
   color: black;
+  height: 100vh;
 }
 
 .bg-dark {
   background-color: #242424;
   color: #fafafa;
+  height: 100vh;
 }
